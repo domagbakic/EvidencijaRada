@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="evidencijaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="djelatnik">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ime" Type="varchar" MaxLength="30" />
+          <Property Name="prezime" Type="varchar" MaxLength="30" />
+          <Property Name="oib" Type="varchar" MaxLength="11" />
+        </EntityType>
+        <EntityType Name="vezaDjelatnikRad">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id_djelatnik" Type="int" Nullable="false" />
+          <Property Name="id_vrstaRada" Type="int" Nullable="false" />
+          <Property Name="pocetak" Type="datetime" />
+          <Property Name="kraj" Type="datetime" />
+          <Property Name="brojSati" Type="int" />
+          <Property Name="danUTjednu" Type="varchar" MaxLength="20" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tjedanUGodini" Type="int" />
+          <Property Name="prviDatumTjedna" Type="datetime" />
+          <Property Name="satPocetka" Type="varchar" MaxLength="10" />
+          <Property Name="satKraja" Type="varchar" MaxLength="10" />
+          <Property Name="mjesecUGodini" Type="varchar" MaxLength="20" />
+          <Property Name="danUMjesec" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="vrstaRada">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="naziv" Type="varchar" MaxLength="50" />
+          <Property Name="boja" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__vezaDjela__id_dj__5AEE82B9">
+          <End Role="djelatnik" Type="Self.djelatnik" Multiplicity="1" />
+          <End Role="vezaDjelatnikRad" Type="Self.vezaDjelatnikRad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="djelatnik">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="vezaDjelatnikRad">
+              <PropertyRef Name="id_djelatnik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__vezaDjela__id_vr__5BE2A6F2">
+          <End Role="vrstaRada" Type="Self.vrstaRada" Multiplicity="1" />
+          <End Role="vezaDjelatnikRad" Type="Self.vezaDjelatnikRad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="vrstaRada">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="vezaDjelatnikRad">
+              <PropertyRef Name="id_vrstaRada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="evidencijaModelStoreContainer">
+          <EntitySet Name="djelatnik" EntityType="Self.djelatnik" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vezaDjelatnikRad" EntityType="Self.vezaDjelatnikRad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vrstaRada" EntityType="Self.vrstaRada" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__vezaDjela__id_dj__5AEE82B9" Association="Self.FK__vezaDjela__id_dj__5AEE82B9">
+            <End Role="djelatnik" EntitySet="djelatnik" />
+            <End Role="vezaDjelatnikRad" EntitySet="vezaDjelatnikRad" />
+          </AssociationSet>
+          <AssociationSet Name="FK__vezaDjela__id_vr__5BE2A6F2" Association="Self.FK__vezaDjela__id_vr__5BE2A6F2">
+            <End Role="vrstaRada" EntitySet="vrstaRada" />
+            <End Role="vezaDjelatnikRad" EntitySet="vezaDjelatnikRad" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="evidencijaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="evidencijaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="djelatnik" EntityType="evidencijaModel.djelatnik" />
+          <EntitySet Name="vezaDjelatnikRad" EntityType="evidencijaModel.vezaDjelatnikRad" />
+          <EntitySet Name="vrstaRada" EntityType="evidencijaModel.vrstaRada" />
+          <AssociationSet Name="FK__vezaDjela__id_dj__5AEE82B9" Association="evidencijaModel.FK__vezaDjela__id_dj__5AEE82B9">
+            <End Role="djelatnik" EntitySet="djelatnik" />
+            <End Role="vezaDjelatnikRad" EntitySet="vezaDjelatnikRad" />
+          </AssociationSet>
+          <AssociationSet Name="FK__vezaDjela__id_vr__5BE2A6F2" Association="evidencijaModel.FK__vezaDjela__id_vr__5BE2A6F2">
+            <End Role="vrstaRada" EntitySet="vrstaRada" />
+            <End Role="vezaDjelatnikRad" EntitySet="vezaDjelatnikRad" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="djelatnik">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ime" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="prezime" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="oib" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="vezaDjelatnikRad" Relationship="evidencijaModel.FK__vezaDjela__id_dj__5AEE82B9" FromRole="djelatnik" ToRole="vezaDjelatnikRad" />
+        </EntityType>
+        <EntityType Name="vezaDjelatnikRad">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id_djelatnik" Type="Int32" Nullable="false" />
+          <Property Name="id_vrstaRada" Type="Int32" Nullable="false" />
+          <Property Name="pocetak" Type="DateTime" Precision="3" />
+          <Property Name="kraj" Type="DateTime" Precision="3" />
+          <Property Name="brojSati" Type="Int32" />
+          <Property Name="danUTjednu" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="djelatnik" Relationship="evidencijaModel.FK__vezaDjela__id_dj__5AEE82B9" FromRole="vezaDjelatnikRad" ToRole="djelatnik" />
+          <NavigationProperty Name="vrstaRada" Relationship="evidencijaModel.FK__vezaDjela__id_vr__5BE2A6F2" FromRole="vezaDjelatnikRad" ToRole="vrstaRada" />
+          <Property Name="tjedanUGodini" Type="Int32" />
+          <Property Name="prviDatumTjedna" Type="DateTime" Precision="3" />
+          <Property Name="satPocetka" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="satKraja" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="mjesecUGodini" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="danUMjesec" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="vrstaRada">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="naziv" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="vezaDjelatnikRad" Relationship="evidencijaModel.FK__vezaDjela__id_vr__5BE2A6F2" FromRole="vrstaRada" ToRole="vezaDjelatnikRad" />
+          <Property Name="boja" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK__vezaDjela__id_dj__5AEE82B9">
+          <End Type="evidencijaModel.djelatnik" Role="djelatnik" Multiplicity="1" />
+          <End Type="evidencijaModel.vezaDjelatnikRad" Role="vezaDjelatnikRad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="djelatnik">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="vezaDjelatnikRad">
+              <PropertyRef Name="id_djelatnik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__vezaDjela__id_vr__5BE2A6F2">
+          <End Type="evidencijaModel.vrstaRada" Role="vrstaRada" Multiplicity="1" />
+          <End Type="evidencijaModel.vezaDjelatnikRad" Role="vezaDjelatnikRad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="vrstaRada">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="vezaDjelatnikRad">
+              <PropertyRef Name="id_vrstaRada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="evidencijaModelStoreContainer" CdmEntityContainer="evidencijaEntities">
+          <EntitySetMapping Name="djelatnik">
+            <EntityTypeMapping TypeName="evidencijaModel.djelatnik">
+              <MappingFragment StoreEntitySet="djelatnik">
+                <ScalarProperty Name="oib" ColumnName="oib" />
+                <ScalarProperty Name="prezime" ColumnName="prezime" />
+                <ScalarProperty Name="ime" ColumnName="ime" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vezaDjelatnikRad">
+            <EntityTypeMapping TypeName="evidencijaModel.vezaDjelatnikRad">
+              <MappingFragment StoreEntitySet="vezaDjelatnikRad">
+                <ScalarProperty Name="danUMjesec" ColumnName="danUMjesec" />
+                <ScalarProperty Name="mjesecUGodini" ColumnName="mjesecUGodini" />
+                <ScalarProperty Name="satKraja" ColumnName="satKraja" />
+                <ScalarProperty Name="satPocetka" ColumnName="satPocetka" />
+                <ScalarProperty Name="prviDatumTjedna" ColumnName="prviDatumTjedna" />
+                <ScalarProperty Name="tjedanUGodini" ColumnName="tjedanUGodini" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="danUTjednu" ColumnName="danUTjednu" />
+                <ScalarProperty Name="brojSati" ColumnName="brojSati" />
+                <ScalarProperty Name="kraj" ColumnName="kraj" />
+                <ScalarProperty Name="pocetak" ColumnName="pocetak" />
+                <ScalarProperty Name="id_vrstaRada" ColumnName="id_vrstaRada" />
+                <ScalarProperty Name="id_djelatnik" ColumnName="id_djelatnik" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vrstaRada">
+            <EntityTypeMapping TypeName="evidencijaModel.vrstaRada">
+              <MappingFragment StoreEntitySet="vrstaRada">
+                <ScalarProperty Name="boja" ColumnName="boja" />
+                <ScalarProperty Name="naziv" ColumnName="naziv" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

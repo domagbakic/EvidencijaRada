@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="evidencijaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="djelatnik">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ime" Type="varchar" MaxLength="30" />
+    <Property Name="prezime" Type="varchar" MaxLength="30" />
+    <Property Name="oib" Type="varchar" MaxLength="11" />
+  </EntityType>
+  <EntityType Name="vezaDjelatnikRad">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id_djelatnik" Type="int" Nullable="false" />
+    <Property Name="id_vrstaRada" Type="int" Nullable="false" />
+    <Property Name="pocetak" Type="datetime" />
+    <Property Name="kraj" Type="datetime" />
+    <Property Name="brojSati" Type="int" />
+    <Property Name="danUTjednu" Type="varchar" MaxLength="20" />
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="tjedanUGodini" Type="int" />
+    <Property Name="prviDatumTjedna" Type="datetime" />
+    <Property Name="satPocetka" Type="varchar" MaxLength="10" />
+    <Property Name="satKraja" Type="varchar" MaxLength="10" />
+    <Property Name="mjesecUGodini" Type="varchar" MaxLength="20" />
+    <Property Name="danUMjesec" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="vrstaRada">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="naziv" Type="varchar" MaxLength="50" />
+    <Property Name="boja" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK__vezaDjela__id_dj__5AEE82B9">
+    <End Role="djelatnik" Type="Self.djelatnik" Multiplicity="1" />
+    <End Role="vezaDjelatnikRad" Type="Self.vezaDjelatnikRad" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="djelatnik">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="vezaDjelatnikRad">
+        <PropertyRef Name="id_djelatnik" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__vezaDjela__id_vr__5BE2A6F2">
+    <End Role="vrstaRada" Type="Self.vrstaRada" Multiplicity="1" />
+    <End Role="vezaDjelatnikRad" Type="Self.vezaDjelatnikRad" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="vrstaRada">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="vezaDjelatnikRad">
+        <PropertyRef Name="id_vrstaRada" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="evidencijaModelStoreContainer">
+    <EntitySet Name="djelatnik" EntityType="Self.djelatnik" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vezaDjelatnikRad" EntityType="Self.vezaDjelatnikRad" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vrstaRada" EntityType="Self.vrstaRada" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__vezaDjela__id_dj__5AEE82B9" Association="Self.FK__vezaDjela__id_dj__5AEE82B9">
+      <End Role="djelatnik" EntitySet="djelatnik" />
+      <End Role="vezaDjelatnikRad" EntitySet="vezaDjelatnikRad" />
+    </AssociationSet>
+    <AssociationSet Name="FK__vezaDjela__id_vr__5BE2A6F2" Association="Self.FK__vezaDjela__id_vr__5BE2A6F2">
+      <End Role="vrstaRada" EntitySet="vrstaRada" />
+      <End Role="vezaDjelatnikRad" EntitySet="vezaDjelatnikRad" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
