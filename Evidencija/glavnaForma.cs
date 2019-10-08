@@ -20,6 +20,7 @@ namespace Evidencija
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            pregledEvidencija.Selected += new TabControlEventHandler(pregledEvidencija_Selected);
             CistiLabele();
             PrikaziVrsteRada();
             DohvatiDjelatnike();
@@ -29,6 +30,25 @@ namespace Evidencija
             PuniDomain();
             PuniDomain2();
             BojajDGV();
+        }
+
+        private void pregledEvidencija_Selected(object sender, TabControlEventArgs e)
+        {
+            if (e.TabPage.Name == mjesecniPregled.Name)
+            {
+                CistiLabele();
+                PuniTablicu3();
+            }
+            else if (e.TabPage.Name == tjedniPregled.Name)
+            {
+                CistiLabele();
+                PuniTablicu();
+            }
+            else if (e.TabPage.Name == dnevniPregled.Name)
+            {
+                CistiLabele();
+                PuniTablicu2();
+            }
         }
 
         private void CistiLabele()
@@ -226,6 +246,7 @@ namespace Evidencija
             var labels = this.tableLayoutPanel2.Controls.OfType<Label>()
                           .Where(c => c.Name.StartsWith("lbl1"))
                           .ToList();
+            List<Label> listaObojanihLabela = new List<Label>();
 
             using (var db = new evidencijaEntities())
             {
@@ -235,7 +256,7 @@ namespace Evidencija
                     if (item.danUMjesec == monthCalendar1.SelectionRange.Start.ToString("dd"))
                     {
                         foreach (var label in labels)
-                        {
+                        {                            
                             string sadrzi = "";
                             var pocetak = item.satPocetka;
                             var kraj = item.satKraja;
@@ -257,7 +278,7 @@ namespace Evidencija
         }
 
         private void domainUpDown2_SelectedItemChanged(object sender, EventArgs e)
-        {
+        {            
             CistiLabele();
             PuniTablicu3();
         }
@@ -313,21 +334,6 @@ namespace Evidencija
             noviUnos.Show();
             this.Hide();
         }
-
-        private void dnevniPregled_Click(object sender, EventArgs e)
-        {
-            PuniTablicu2();
-        }
-        private void tjedniPregled_Click(object sender, EventArgs e)
-        {
-            PuniTablicu();
-        }
-
-        private void mjesecniPregled_Click(object sender, EventArgs e)
-        {
-            PuniTablicu3();
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             unos noviUnos = new unos(djelatnikBindingSource.Current as djelatnik);
@@ -341,18 +347,6 @@ namespace Evidencija
             noviUnos.Show();
             this.Hide();
         }
-
-        private void pregledEvidencija_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            CistiLabele();           
-            PuniTablicu();
-            PuniTablicu2();
-            PuniTablicu3();
-            PuniDomain();
-            PuniDomain2();
-            BojajDGV();
-        }
-
     }        
 }
 

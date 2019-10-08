@@ -22,15 +22,34 @@ namespace Evidencija
 
         private void btnSpremi_Click(object sender, EventArgs e)
         {
-            //ProvjeraDuplogUnosa(); TODO provjera duplog unosa
-            vrstaRada odabranaVrsta = vrstaRadaBindingSource.Current as vrstaRada;
+            using (var db = new evidencijaEntities())
+            {
+                var A = db.vezaDjelatnikRad.Where(x => x.id_djelatnik == 1).ToList();
+                foreach (var item in A)
+                {
+                    if (item.danUMjesec == dtpDatum.Value.ToString("dd"))
+                    {
+                        DialogResult dialogResult = MessageBox.Show("Već postoji unos za taj dan. Želite li nastaviti?", 
+                            "Dupli unos", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            vrstaRada odabranaVrsta = vrstaRadaBindingSource.Current as vrstaRada;
 
-            Dodaj(odabraniDjelatnik, odabranaVrsta);
+                            Dodaj(odabraniDjelatnik, odabranaVrsta);
 
-            glavnaForma gF = new glavnaForma();
-            this.Hide();
-            gF.ShowDialog();
-            this.Close();
+                            glavnaForma gF = new glavnaForma();
+                            this.Hide();
+                            gF.ShowDialog();
+                            this.Close();
+                        }
+                        else if (dialogResult == DialogResult.No)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            
         }
 
         private void Dodaj(djelatnik odabraniDjelatnik, vrstaRada odabranaVrsta)
