@@ -80,6 +80,12 @@
     <Compile Include="glavnaForma.Designer.cs">
       <DependentUpon>glavnaForma.cs</DependentUpon>
     </Compile>
+    <Compile Include="preloader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="preloader.Designer.cs">
+      <DependentUpon>preloader.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="unos.cs">
@@ -94,8 +100,17 @@
     <Compile Include="vrstaRada.cs">
       <DependentUpon>Evidencija.tt</DependentUpon>
     </Compile>
+    <Compile Include="zaposlenik.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="zaposlenik.Designer.cs">
+      <DependentUpon>zaposlenik.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="glavnaForma.resx">
       <DependentUpon>glavnaForma.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="preloader.resx">
+      <DependentUpon>preloader.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -108,6 +123,9 @@
     </Compile>
     <EmbeddedResource Include="unos.resx">
       <DependentUpon>unos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="zaposlenik.resx">
+      <DependentUpon>zaposlenik.cs</DependentUpon>
     </EmbeddedResource>
     <EntityDeploy Include="Evidencija.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

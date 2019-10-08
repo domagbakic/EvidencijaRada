@@ -18,7 +18,7 @@
     <Property Name="pocetak" Type="datetime" />
     <Property Name="kraj" Type="datetime" />
     <Property Name="brojSati" Type="int" />
-    <Property Name="danUTjednu" Type="varchar" MaxLength="20" />
+    <Property Name="danUTjednu" Type="int" />
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="tjedanUGodini" Type="int" />
     <Property Name="prviDatumTjedna" Type="datetime" />

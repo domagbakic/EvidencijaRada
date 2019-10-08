@@ -32,7 +32,7 @@
     <Property Name="pocetak" Type="DateTime" Precision="3" />
     <Property Name="kraj" Type="DateTime" Precision="3" />
     <Property Name="brojSati" Type="Int32" />
-    <Property Name="danUTjednu" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="danUTjednu" Type="Int32" />
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <NavigationProperty Name="djelatnik" Relationship="evidencijaModel.FK__vezaDjela__id_dj__5AEE82B9" FromRole="vezaDjelatnikRad" ToRole="djelatnik" />
     <NavigationProperty Name="vrstaRada" Relationship="evidencijaModel.FK__vezaDjela__id_vr__5BE2A6F2" FromRole="vezaDjelatnikRad" ToRole="vrstaRada" />

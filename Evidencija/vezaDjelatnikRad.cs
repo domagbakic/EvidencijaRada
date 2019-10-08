@@ -19,7 +19,7 @@ namespace Evidencija
         public Nullable<System.DateTime> pocetak { get; set; }
         public Nullable<System.DateTime> kraj { get; set; }
         public Nullable<int> brojSati { get; set; }
-        public string danUTjednu { get; set; }
+        public Nullable<int> danUTjednu { get; set; }
         public int id { get; set; }
         public Nullable<int> tjedanUGodini { get; set; }
         public Nullable<System.DateTime> prviDatumTjedna { get; set; }

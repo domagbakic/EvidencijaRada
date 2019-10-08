@@ -12,50 +12,42 @@ using System.Globalization;
 namespace Evidencija
 {
     public partial class glavnaForma : Form
-    {        
+    {
         public glavnaForma()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            ShowWaitForm(); //preloader forma
+
             pregledEvidencija.Selected += new TabControlEventHandler(pregledEvidencija_Selected);
+
             CistiLabele();
+            
             PrikaziVrsteRada();
             DohvatiDjelatnike();
-            PuniTablicu();
-            PuniTablicu2();
-            PuniTablicu3();
-            PuniDomain();
-            PuniDomain2();
-            BojajDGV();
-        }
 
-        private void pregledEvidencija_Selected(object sender, TabControlEventArgs e)
-        {
-            if (e.TabPage.Name == mjesecniPregled.Name)
-            {
-                CistiLabele();
-                PuniTablicu3();
-            }
-            else if (e.TabPage.Name == tjedniPregled.Name)
-            {
-                CistiLabele();
-                PuniTablicu();
-            }
-            else if (e.TabPage.Name == dnevniPregled.Name)
-            {
-                CistiLabele();
-                PuniTablicu2();
-            }
+            DodajRedoveMjesec();
+            DodajRedoveTjedan();
+            DodajRedoveDan();    
+            
+            BojajTablicuMjesec();
+            BojajTablicuTjedan();
+            BojajTablicuDan();    
+            
+            PuniDomainTjedan();
+            PuniDomainGodina();
+            DodajButtonEvente();
+            BojajDGV(); //bojanje vrsti rada
         }
 
         private void CistiLabele()
         {
             //dnevni pregled
             var labels = this.tableLayoutPanel2.Controls.OfType<Label>()
-                          .Where(c => c.Name.StartsWith("lbl1"))
+                          .Where(c => c.Name.StartsWith("lbl"))
                           .ToList();
 
             foreach (var label in labels)
@@ -66,7 +58,7 @@ namespace Evidencija
 
             //mjesecni pregled
             var labels2 = this.tableLayoutPanel3.Controls.OfType<Label>()
-                          .Where(c => c.Name.StartsWith("lblA"))
+                          .Where(c => c.Name.StartsWith("lbl"))
                           .ToList();
 
             foreach (var label in labels2)
@@ -77,7 +69,7 @@ namespace Evidencija
 
             //tjedni pregled
             var labels3 = this.tableLayoutPanel1.Controls.OfType<Label>()
-                          .Where(c => c.Name.StartsWith("lbl1"))
+                          .Where(c => c.Name.Contains("A"))
                           .ToList();
 
             foreach (var label in labels3)
@@ -87,20 +79,6 @@ namespace Evidencija
             }
         }
 
-        private void BojajDGV()
-        {
-            string boja = "";
-            if (dgvVrstaRada.Rows.Count >= 0)
-            {
-                foreach (DataGridViewRow row in dgvVrstaRada.Rows)
-                {
-                    boja = row.Cells[2].Value.ToString();
-                    row.Cells[2].Style.BackColor = Color.FromName(boja);
-                    row.Cells[2].Value = "";
-                }
-            }
-        }
-        
         private void PrikaziVrsteRada()
         {
             BindingList<vrstaRada> listaRada = new BindingList<vrstaRada>();
@@ -120,46 +98,310 @@ namespace Evidencija
             djelatnikBindingSource.DataSource = listaDjelatnika;
         }
 
-        private void PuniTablicu()
-        {  
-            var labels = this.tableLayoutPanel1.Controls.OfType<Label>()
-                          .Where(c => c.Name.StartsWith("lbl1"))
-                          .ToList();
-
+        private void DodajRedoveMjesec()
+        {
             using (var db = new evidencijaEntities())
             {
-                var A = db.vezaDjelatnikRad.Where(x => x.id_djelatnik == 1).ToList();
-                foreach (var item in A)
+                var djelatnici = db.djelatnik.ToList();
+                foreach (var item in djelatnici)
                 {
+                    tableLayoutPanel3.Height = tableLayoutPanel3.Height + 60;
+                    tableLayoutPanel3.RowCount = tableLayoutPanel3.RowCount + 1;
+                    tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+                    //generiram kontrole u redu
+                    tableLayoutPanel3.Controls.Add(new Button()
+                    {
+                        Text = item.ime + " " + item.prezime,
+                        Size = new System.Drawing.Size(60, 50),
+                        Margin = new Padding(0, 0, 0, 0)
+                    }, 0, tableLayoutPanel3.RowCount - 1); ;
+                    for (int i = 1; i < 32; i++)
+                    {
+                        if (i < 10)
+                        {
+                            tableLayoutPanel3.Controls.Add(new Label()
+                            {
+                                Name = "lbl" + item.id.ToString() + "A0" + i.ToString() + "A",
+                                Text = "0",
+                                Size = new System.Drawing.Size(32, 41),
+                                AutoSize = false,
+                                Margin = new Padding(0, 0, 0, 0),
+                                TextAlign = ContentAlignment.MiddleCenter,
+                                Dock = DockStyle.Fill
+                            }, i, tableLayoutPanel3.RowCount - 1);
+                        }
+                        else if (i >= 10)
+                        {
+                            tableLayoutPanel3.Controls.Add(new Label()
+                            {
+                                Name = "lbl" + item.id.ToString() + "A" + i.ToString() + "A",
+                                Text = "0",
+                                Size = new System.Drawing.Size(32, 41),
+                                AutoSize = false,
+                                Margin = new Padding(0, 0, 0, 0),
+                                TextAlign = ContentAlignment.MiddleCenter,
+                                Dock = DockStyle.Fill
+                            }, i, tableLayoutPanel3.RowCount - 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DodajRedoveTjedan()
+        {
+            using (var db = new evidencijaEntities())
+            {
+                var djelatnici = db.djelatnik.ToList();
+                foreach (var item in djelatnici)
+                {
+                    tableLayoutPanel1.Height = tableLayoutPanel1.Height + 60;
+                    tableLayoutPanel1.RowCount = tableLayoutPanel1.RowCount + 1;
+                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+                    //generiram kontrole u redu
+                    tableLayoutPanel1.Controls.Add(new Button()
+                    {
+                        Text = item.ime + " " + item.prezime,
+                        Size = new System.Drawing.Size(60, 50),
+                        Margin = new Padding(0, 0, 0, 0),
+                        Dock = DockStyle.Fill
+                    }, 0, tableLayoutPanel1.RowCount - 1); ;
+                    for (int i = 1; i < 8; i++)
+                    {
+                        tableLayoutPanel1.Controls.Add(new Label()
+                        {
+                            Name = "lbl" + item.id.ToString() + "A" + i.ToString() + "A",
+                            Text = "0",
+                            Size = new System.Drawing.Size(32, 41),
+                            AutoSize = false,
+                            Margin = new Padding(0, 0, 0, 0),
+                            TextAlign = ContentAlignment.MiddleCenter,
+                            Dock = DockStyle.Fill
+                        }, i, tableLayoutPanel1.RowCount - 1);
+                    }
+                }
+            }
+
+        }
+
+        private void DodajRedoveDan()
+        {
+            using (var db = new evidencijaEntities())
+            {
+                var djelatnici = db.djelatnik.ToList();
+                foreach (var item in djelatnici)
+                {
+                    tableLayoutPanel2.Height = tableLayoutPanel2.Height + 60;
+                    tableLayoutPanel2.RowCount = tableLayoutPanel2.RowCount + 1;
+                    tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+                    //generiram kontrole u redu
+                    tableLayoutPanel2.Controls.Add(new Button()
+                    {
+                        Text = item.ime + " " + item.prezime,
+                        Size = new System.Drawing.Size(60, 50),
+                        Margin = new Padding(0, 0, 0, 0),
+                        Dock = DockStyle.Fill
+                    }, 0, tableLayoutPanel2.RowCount - 1); ;
+                    for (int i = 1; i < 19; i++)
+                    {
+                        tableLayoutPanel2.Controls.Add(new Label()
+                        {
+                            Name = "lbl" + item.id.ToString() + "A" + (i + 5).ToString() + "A",
+                            Text = "",
+                            Size = new System.Drawing.Size(32, 41),
+                            AutoSize = false,
+                            Margin = new Padding(0, 0, 0, 0),
+                            TextAlign = ContentAlignment.MiddleCenter,
+                            Dock = DockStyle.Fill
+                        }, i, tableLayoutPanel2.RowCount - 1);
+                    }
+                }
+            }
+        }
+
+        private void BojajTablicuMjesec() //Mjesečni pregled
+        {
+            using (var db = new evidencijaEntities())
+            {
+                var listaVeza = db.vezaDjelatnikRad.ToList();
+                foreach (var item in listaVeza)
+                {
+                    var labels = this.tableLayoutPanel3.Controls.OfType<Label>()
+                          .Where(c => c.Name.StartsWith("lbl" + item.djelatnik.id))
+                          .ToList();
                     foreach (var label in labels)
                     {
-                        if (item.danUTjednu != "nedjelja") // TODO problem ponedjeljak-nedjelja
+                        if (label.Name.Contains(item.danUMjesec))
                         {
-                            if (label.Name.Contains(item.danUTjednu))
+                            if (item.mjesecUGodini == domMjesec.Text)
                             {
-                                if (item.tjedanUGodini.ToString() == domTjedan.Text)
-                                {
-                                    label.BackColor = Color.FromName(item.vrstaRada.boja);
-                                    label.Text = item.brojSati.ToString();
-                                }
+                                label.BackColor = Color.FromName(item.vrstaRada.boja);
+                                label.Text = item.brojSati.ToString();
                             }
                         }
-                        else
-                        {
-                            if (label.Name.Contains(item.danUTjednu))
-                            {
-                                if (item.tjedanUGodini.ToString() == domTjedan.Text)
-                                {
-                                    label.BackColor = Color.FromName(item.vrstaRada.boja);
-                                    label.Text = item.brojSati.ToString();
-                                }
-                            }
-                        }
-                    }                    
+                    }
                 }
-            }            
+            }
         }
-        
+
+        private void BojajTablicuTjedan()
+        {
+            using (var db = new evidencijaEntities())
+            {
+                var listaVeza = db.vezaDjelatnikRad.ToList(); //dohvaćam sve veze i stavljam ih u listu
+                foreach (var item in listaVeza)
+                {
+                    var labels = this.tableLayoutPanel1.Controls.OfType<Label>()
+                          .Where(c => c.Name.StartsWith("lbl" + item.djelatnik.id))
+                          .ToList();
+
+                    foreach (var label in labels)
+                    {
+                        if (label.Name.Contains(item.danUTjednu.ToString()))
+                        {
+                            if (item.tjedanUGodini.ToString() == domTjedan.Text)
+                            {
+                                label.BackColor = Color.FromName(item.vrstaRada.boja);
+                                label.Text = item.brojSati.ToString();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void BojajTablicuDan() // Dnevni pregled
+        {
+            using (var db = new evidencijaEntities())
+            {
+                var listaVeza = db.vezaDjelatnikRad.ToList();
+                foreach (var item in listaVeza)
+                {
+                    var labels = this.tableLayoutPanel2.Controls.OfType<Label>()
+                          .Where(c => c.Name.StartsWith("lbl" + item.djelatnik.id))
+                          .ToList();
+                    if (item.danUMjesec == monthCalendar1.SelectionRange.Start.ToString("dd"))
+                    {
+                        foreach (var label in labels)
+                        {
+                            string sadrzi = "";
+                            var pocetak = item.satPocetka;
+                            var kraj = item.satKraja;
+                            var sati = item.brojSati;
+                            for (int i = int.Parse(pocetak) + 1; i < int.Parse(kraj); i++)
+                            {
+                                sadrzi = "lbl" + item.djelatnik.id + "A" + i.ToString() + "A";
+
+                                if (label.Name.Contains("A" + item.satPocetka + "A") ||
+                                label.Name.Contains(sadrzi))
+                                {
+                                    label.BackColor = Color.FromName(item.vrstaRada.boja);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void PuniDomainTjedan() // Domain s tjednima
+        {
+            DomainUpDown.DomainUpDownItemCollection tjedniUGodini = this.domTjedan.Items;
+            DateTime zadnjiDan = new DateTime(2019, 12, 27);
+            int brojTjedana = GetIso8601WeekOfYear(zadnjiDan);
+            for (int i = 1; i <= brojTjedana; i++)
+            {
+                tjedniUGodini.Add(i.ToString());
+            }
+            domTjedan.SelectedIndex = GetIso8601WeekOfYear(DateTime.Now) - 1;
+        }
+
+        private void PuniDomainGodina()
+        {
+            DomainUpDown.DomainUpDownItemCollection mjeseci = this.domMjesec.Items;
+            mjeseci.Add("siječanj");
+            mjeseci.Add("veljača");
+            mjeseci.Add("ožujak");
+            mjeseci.Add("travanj");
+            mjeseci.Add("svibanj");
+            mjeseci.Add("lipanj");
+            mjeseci.Add("srpanj");
+            mjeseci.Add("kolovoz");
+            mjeseci.Add("rujan");
+            mjeseci.Add("listopad");
+            mjeseci.Add("studeni");
+            mjeseci.Add("prosinac");
+
+            domMjesec.SelectedIndex = int.Parse(DateTime.Now.ToString("MM")) - 1;
+        }
+
+        private void DodajButtonEvente() //za svaki generirani button dodajem event kojim se omogućuje unos
+        {
+            var buttonsMjesec = this.tableLayoutPanel3.Controls.OfType<Button>().ToList();
+            foreach (var button in buttonsMjesec)
+            {
+                button.Click += (s, e) => {
+                    unos noviUnos = new unos(djelatnikBindingSource.Current as djelatnik); //TODO smisliti kako proslijediti
+                                                                                           // pravog djelatnika
+                    noviUnos.Show();
+                    this.Hide();
+                };
+            }
+
+            var buttonsTjedan = this.tableLayoutPanel1.Controls.OfType<Button>().ToList();
+            foreach (var button in buttonsTjedan)
+            {
+                button.Click += (s, e) => {
+                    unos noviUnos = new unos(djelatnikBindingSource.Current as djelatnik);
+                    noviUnos.Show();
+                    this.Hide();
+                };
+            }
+
+            var buttonsDan = this.tableLayoutPanel2.Controls.OfType<Button>().ToList();
+            foreach (var button in buttonsDan)
+            {
+                button.Click += (s, e) => {
+                    unos noviUnos = new unos(djelatnikBindingSource.Current as djelatnik);
+                    noviUnos.Show();
+                    this.Hide();
+                };
+            }
+        }
+
+        private void BojajDGV()
+        {
+            string boja = "";
+            if (dgvVrstaRada.Rows.Count >= 0)
+            {
+                foreach (DataGridViewRow row in dgvVrstaRada.Rows)
+                {
+                    boja = row.Cells[2].Value.ToString();
+                    row.Cells[2].Style.BackColor = Color.FromName(boja);
+                    row.Cells[2].Value = "";
+                }
+            }
+        }
+
+        private void pregledEvidencija_Selected(object sender, TabControlEventArgs e)
+        {
+            if (e.TabPage.Name == mjesecniPregled.Name)
+            {
+                CistiLabele();
+                BojajTablicuMjesec();
+            }
+            else if (e.TabPage.Name == tjedniPregled.Name)
+            {
+                CistiLabele();
+                BojajTablicuTjedan();
+            }
+            else if (e.TabPage.Name == dnevniPregled.Name)
+            {
+                CistiLabele();
+                BojajTablicuDan();
+            }
+        }
+
         public static int GetIso8601WeekOfYear(DateTime time) // Za svaki datum računa broj tjedna u godini
         {
             // Seriously cheat.  If its Monday, Tuesday or Wednesday, then it'll 
@@ -174,7 +416,7 @@ namespace Evidencija
             // Return the week of our adjusted day
             return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         }
-                
+
         public static DateTime FirstDateOfWeekISO8601(int year, int weekOfYear) //računa datum ponedjeljka za svaki broj tjedna
         {
             DateTime jan1 = new DateTime(year, 1, 1);
@@ -200,23 +442,12 @@ namespace Evidencija
 
             // Subtract 3 days from Thursday to get Monday, which is the first weekday in ISO8601
             return result.AddDays(-3);
-        }
-        private void PuniDomain() // Domain s tjednima
-        {
-            DomainUpDown.DomainUpDownItemCollection tjedniUGodini = this.domTjedan.Items;
-            DateTime zadnjiDan = new DateTime(2019, 12, 27);
-            int brojTjedana = GetIso8601WeekOfYear(zadnjiDan);
-            for (int i = 1; i <= brojTjedana; i++)
-            {
-                tjedniUGodini.Add(i.ToString());                
-            }
-            domTjedan.SelectedIndex = GetIso8601WeekOfYear(DateTime.Now) - 1;
-        }
+        }        
 
         private void domainUpDown1_SelectedItemChanged(object sender, EventArgs e)
         {
             CistiLabele();
-            PuniTablicu();
+            BojajTablicuTjedan();
             lblponedjeljak.Text = "Ponedjeljak";
             lblUtorak.Text = "Utorak";
             lblSrijeda.Text = "Srijeda";
@@ -238,116 +469,48 @@ namespace Evidencija
         private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
         {
             CistiLabele();
-            PuniTablicu2();
-        }
-       
-        private void PuniTablicu2() // Dnevni pregled
-        {
-            var labels = this.tableLayoutPanel2.Controls.OfType<Label>()
-                          .Where(c => c.Name.StartsWith("lbl1"))
-                          .ToList();
-            List<Label> listaObojanihLabela = new List<Label>();
-
-            using (var db = new evidencijaEntities())
-            {
-                var A = db.vezaDjelatnikRad.Where(x => x.id_djelatnik == 1).ToList();
-                foreach (var item in A)
-                {
-                    if (item.danUMjesec == monthCalendar1.SelectionRange.Start.ToString("dd"))
-                    {
-                        foreach (var label in labels)
-                        {                            
-                            string sadrzi = "";
-                            var pocetak = item.satPocetka;
-                            var kraj = item.satKraja;
-                            var sati = item.brojSati;
-                            for (int i = int.Parse(pocetak) + 1; i < int.Parse(kraj); i++)
-                            {
-                                sadrzi = "lbl1A" + i.ToString() + "A";
-
-                                if (label.Name.Contains("A" + item.satPocetka + "A") ||
-                                label.Name.Contains(sadrzi))
-                                {
-                                    label.BackColor = Color.FromName(item.vrstaRada.boja);
-                                }
-                            }
-                        }
-                    }                          
-                }
-            }
-        }
+            BojajTablicuDan();
+        }        
 
         private void domainUpDown2_SelectedItemChanged(object sender, EventArgs e)
-        {            
+        {
             CistiLabele();
-            PuniTablicu3();
+            BojajTablicuMjesec();
+        }  
+
+        private void button4_Click(object sender, EventArgs e) //Dodavanje zaposlenika
+        {
+            zaposlenik noviDjelatnik = new zaposlenik();
+            noviDjelatnik.Show();
+            this.Hide();
         }
 
-        private void PuniTablicu3() //Mjesečni pregled
+        private preloader _waitForm; //preloader forma
+        protected void ShowWaitForm()
         {
-            var labels = this.tableLayoutPanel3.Controls.OfType<Label>()
-                          .Where(c => c.Name.StartsWith("lbl"))
-                          .ToList();
-
-            using (var db = new evidencijaEntities())
+            // don't display more than one wait form at a time
+            if (_waitForm != null && !_waitForm.IsDisposed)
             {
-                var A = db.vezaDjelatnikRad.Where(x => x.id_djelatnik == 1).ToList();
-                foreach (var item in A)
-                {
-                    foreach (var label in labels)
-                    {
-                        if (label.Name.Contains(item.danUMjesec))
-                        {
-                            if (item.mjesecUGodini == domMjesec.Text)
-                            {
-                                label.BackColor = Color.FromName(item.vrstaRada.boja);
-                                label.Text = item.brojSati.ToString();
-                            }                            
-                        }
-                    }
-                }
+                return;
             }
+
+            _waitForm = new preloader();
+            _waitForm.TopMost = true;
+            _waitForm.StartPosition = FormStartPosition.CenterScreen;
+            _waitForm.Show();
+            _waitForm.Refresh();
+
+            // force the wait window to display for at least 700ms so it doesn't just flash on the screen
+            System.Threading.Thread.Sleep(700);
+            Application.Idle += OnLoaded;
         }
 
-        private void PuniDomain2()
+        private void OnLoaded(object sender, EventArgs e)
         {
-            DomainUpDown.DomainUpDownItemCollection mjeseci = this.domMjesec.Items;
-            mjeseci.Add("siječanj");
-            mjeseci.Add("veljača");
-            mjeseci.Add("ožujak");
-            mjeseci.Add("travanj");
-            mjeseci.Add("svibanj");
-            mjeseci.Add("lipanj");
-            mjeseci.Add("srpanj");
-            mjeseci.Add("kolovoz");
-            mjeseci.Add("rujan");
-            mjeseci.Add("listopad");
-            mjeseci.Add("studeni");
-            mjeseci.Add("prosinac");
-
-            domMjesec.SelectedIndex = int.Parse(DateTime.Now.ToString("MM")) - 1;
+            Application.Idle -= OnLoaded;
+            _waitForm.Close();
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            unos noviUnos = new unos(djelatnikBindingSource.Current as djelatnik);
-            noviUnos.Show();
-            this.Hide();
-        }
-        private void button2_Click(object sender, EventArgs e)
-        {
-            unos noviUnos = new unos(djelatnikBindingSource.Current as djelatnik);
-            noviUnos.Show();
-            this.Hide();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            unos noviUnos = new unos(djelatnikBindingSource.Current as djelatnik);
-            noviUnos.Show();
-            this.Hide();
-        }
-    }        
+    }    
 }
 
            

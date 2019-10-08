@@ -43,3 +43,5 @@ C:\Users\domag\Documents\Evidencija\EvidencijaRada\Evidencija\obj\Debug\Evidenci
 C:\Users\domag\Documents\Evidencija\EvidencijaRada\Evidencija\obj\Debug\Evidencija.csproj.CopyComplete
 C:\Users\domag\Documents\Evidencija\EvidencijaRada\Evidencija\obj\Debug\Evidencija.exe
 C:\Users\domag\Documents\Evidencija\EvidencijaRada\Evidencija\obj\Debug\Evidencija.pdb
+C:\Users\domag\Documents\Evidencija\EvidencijaRada\Evidencija\obj\Debug\Evidencija.zaposlenik.resources
+C:\Users\domag\Documents\Evidencija\EvidencijaRada\Evidencija\obj\Debug\Evidencija.preloader.resources

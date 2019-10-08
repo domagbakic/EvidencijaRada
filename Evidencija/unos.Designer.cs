@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(unos));
             this.label1 = new System.Windows.Forms.Label();
             this.cmbVrstaRada = new System.Windows.Forms.ComboBox();
             this.vrstaRadaBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -177,8 +178,8 @@
             this.Controls.Add(this.lblVrijemeOd);
             this.Controls.Add(this.cmbVrstaRada);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "unos";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Unos u evidenciju";
             this.Load += new System.EventHandler(this.unos_Load);
