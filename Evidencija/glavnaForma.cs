@@ -111,6 +111,7 @@ namespace Evidencija
                     //generiram kontrole u redu
                     tableLayoutPanel3.Controls.Add(new Button()
                     {
+                        Name = item.id.ToString(),
                         Text = item.ime + " " + item.prezime,
                         Size = new System.Drawing.Size(60, 50),
                         Margin = new Padding(0, 0, 0, 0)
@@ -161,6 +162,7 @@ namespace Evidencija
                     //generiram kontrole u redu
                     tableLayoutPanel1.Controls.Add(new Button()
                     {
+                        Name = item.id.ToString(),
                         Text = item.ime + " " + item.prezime,
                         Size = new System.Drawing.Size(60, 50),
                         Margin = new Padding(0, 0, 0, 0),
@@ -197,6 +199,7 @@ namespace Evidencija
                     //generiram kontrole u redu
                     tableLayoutPanel2.Controls.Add(new Button()
                     {
+                        Name = item.id.ToString(),
                         Text = item.ime + " " + item.prezime,
                         Size = new System.Drawing.Size(60, 50),
                         Margin = new Padding(0, 0, 0, 0),
@@ -341,10 +344,19 @@ namespace Evidencija
             foreach (var button in buttonsMjesec)
             {
                 button.Click += (s, e) => {
-                    unos noviUnos = new unos(djelatnikBindingSource.Current as djelatnik); //TODO smisliti kako proslijediti
-                                                                                           // pravog djelatnika
-                    noviUnos.Show();
-                    this.Hide();
+                    using (var db = new evidencijaEntities())
+                    {
+                        var A = db.djelatnik.ToList();
+                        foreach (var item in A)
+                        {
+                            if (item.id.ToString() == button.Name)
+                            {
+                                unos noviUnos = new unos(item as djelatnik);
+                                noviUnos.Show();
+                                this.Hide();
+                            }
+                        }
+                    }
                 };
             }
 
@@ -352,9 +364,19 @@ namespace Evidencija
             foreach (var button in buttonsTjedan)
             {
                 button.Click += (s, e) => {
-                    unos noviUnos = new unos(djelatnikBindingSource.Current as djelatnik);
-                    noviUnos.Show();
-                    this.Hide();
+                    using (var db = new evidencijaEntities())
+                    {
+                        var A = db.djelatnik.ToList();
+                        foreach (var item in A)
+                        {
+                            if (item.id.ToString() == button.Name)
+                            {
+                                unos noviUnos = new unos(item as djelatnik);
+                                noviUnos.Show();
+                                this.Hide();
+                            }
+                        }
+                    }
                 };
             }
 
@@ -362,9 +384,19 @@ namespace Evidencija
             foreach (var button in buttonsDan)
             {
                 button.Click += (s, e) => {
-                    unos noviUnos = new unos(djelatnikBindingSource.Current as djelatnik);
-                    noviUnos.Show();
-                    this.Hide();
+                    using (var db = new evidencijaEntities())
+                    {
+                        var A = db.djelatnik.ToList();
+                        foreach (var item in A)
+                        {
+                            if (item.id.ToString() == button.Name)
+                            {
+                                unos noviUnos = new unos(item as djelatnik);
+                                noviUnos.Show();
+                                this.Hide();
+                            }
+                        }
+                    }
                 };
             }
         }
