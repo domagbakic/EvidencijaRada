@@ -240,6 +240,8 @@ namespace Evidencija
                             {
                                 label.BackColor = Color.FromName(item.vrstaRada.boja);
                                 label.Text = item.brojSati.ToString();
+                                toolTip1.SetToolTip(label, item.vrstaRada.naziv + Environment.NewLine + 
+                                    item.satPocetka.ToString() + " - " + item.satKraja.ToString());
                             }
                         }
                     }
@@ -266,6 +268,8 @@ namespace Evidencija
                             {
                                 label.BackColor = Color.FromName(item.vrstaRada.boja);
                                 label.Text = item.brojSati.ToString();
+                                toolTip1.SetToolTip(label, item.vrstaRada.naziv + Environment.NewLine +
+                                    item.satPocetka.ToString() + " - " + item.satKraja.ToString());
                             }
                         }
                     }
@@ -299,6 +303,7 @@ namespace Evidencija
                                 label.Name.Contains(sadrzi))
                                 {
                                     label.BackColor = Color.FromName(item.vrstaRada.boja);
+                                    toolTip1.SetToolTip(label, item.vrstaRada.naziv);
                                 }
                             }
                         }
