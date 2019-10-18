@@ -12,3 +12,9 @@ Dostupni su mjesečni, tjedni i dnevni pregledi. Broj unutar polja predstavlja b
 *Dodavanje novog unosa*
 
 Pritiskom na gumb zaposlenik otvara se nova forma za unos podataka. Nakon unosa, automatski se osvježavaju pregledi evidencije.
+
+Brzi unos - desni klik na polje u koje se želi unijeti novi unos i odabrati opciju za dodavanje redovnih osam sati rada. (samo mjesečni pregled)
+
+*Brisanje unosa*
+
+Desni klik na željeno polje i odabrati opciju za brisanje unosa. (samo mjesečni pregled)
