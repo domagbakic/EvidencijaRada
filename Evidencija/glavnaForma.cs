@@ -763,13 +763,11 @@ namespace Evidencija
                         db.vezaDjelatnikRad.Remove(item as vezaDjelatnikRad);
                         db.SaveChanges();
                     }
-                    DodajStupceMjesecDGV();
-                    DodajRedoveMjesecDGV();
-                    CistiDGV();
-                    BojajMjesecDGV();
                 }
                 
             }
+            CistiDGV();
+            BojajMjesecDGV();
         }
 
         private void BrzoBrisanje(int stupac, int redak)
